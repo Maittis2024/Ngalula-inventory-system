@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ngalula Beauty Spa Inventory System</title>
+  <title>Spa Inventory System</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -26,31 +26,45 @@
       <select id="paymentMethod" required>
         <option value="">Select payment method</option>
         <option value="cash">Cash</option>
-        <option value="mobileMoney">Mobile Money</option>
-        <option value="card">Card</option>
+        <option value="credit">Credit Card</option>
+        <option value="mobile">Mobile Money</option>
+        <option value="ewallet">E-Wallet</option>
+        <option value="pay2cell">Pay2Cell</option>
       </select>
 
-      <h3>Services</h3>
+      <label>Services:</label>
       <div id="servicesList">
         <div class="service-item">
-          <input type="checkbox" name="services" value="Facial" data-price="150"> Facial (150 ZMW)
+          <input type="checkbox" name="services" value="massage" data-price="500"> Massage (500 ZMW)
           <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
         </div>
         <div class="service-item">
-          <input type="checkbox" name="services" value="Massage" data-price="200"> Massage (200 ZMW)
+          <input type="checkbox" name="services" value="facial" data-price="400"> Facial (400 ZMW)
+          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
+        </div>
+        <div class="service-item">
+          <input type="checkbox" name="services" value="manicure" data-price="300"> Manicure (300 ZMW)
+          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
+        </div>
+        <div class="service-item">
+          <input type="checkbox" name="services" value="pedicure" data-price="350"> Pedicure (350 ZMW)
           <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
         </div>
       </div>
       <button type="button" onclick="addService()">Add Service</button>
 
-      <h3>Therapists</h3>
+      <label>Therapists:</label>
       <div id="therapistsList">
         <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="Therapist 1"> Therapist 1
+          <input type="checkbox" name="therapists" value="john"> John
           <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
         </div>
         <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="Therapist 2"> Therapist 2
+          <input type="checkbox" name="therapists" value="sarah"> Sarah
+          <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
+        </div>
+        <div class="therapist-item">
+          <input type="checkbox" name="therapists" value="emma"> Emma
           <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
         </div>
       </div>
@@ -61,16 +75,16 @@
 
     <div id="totalAmount"></div>
 
-    <h2>Reports</h2>
-    <button id="dailyReport">Generate Daily Report</button>
-    <button id="weeklyReport">Generate Weekly Report</button>
-    <button id="monthlyReport">Generate Monthly Report</button>
-
     <div id="reportSection">
+      <h2>Financial Report</h2>
+      <button id="dailyReport">Daily Report</button>
+      <button id="weeklyReport">Weekly Report</button>
+      <button id="monthlyReport">Monthly Report</button>
       <div id="reportResult"></div>
     </div>
   </div>
 
-  <script src="js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
 </body>
 </html>

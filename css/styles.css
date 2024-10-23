@@ -5,7 +5,6 @@ body {
   padding: 20px;
   background-color: #f0f8ff;
 }
-
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -14,28 +13,23 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-
 h1, h2 {
   color: #4682b4;
   text-align: center;
 }
-
 form {
   display: grid;
   gap: 10px;
 }
-
 label {
   font-weight: bold;
 }
-
 input, select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-
 button {
   background-color: #4682b4;
   color: white;
@@ -44,27 +38,22 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
-
 button:hover {
   background-color: #36648b;
 }
-
 #totalAmount {
   font-size: 1.2em;
   font-weight: bold;
   margin-top: 20px;
 }
-
 #reportSection {
   margin-top: 20px;
 }
-
 .service-item, .therapist-item {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
 }
-
 .delete-btn {
   background-color: #ff4136;
   color: white;
