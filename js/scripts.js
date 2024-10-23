@@ -1,11 +1,85 @@
 const clientForm = document.getElementById('clientForm');
     const totalAmountDiv = document.getElementById('totalAmount');
     const reportResult = document.getElementById('reportResult');
+    const servicesList = document.getElementById('servicesList');
+    const therapistList = document.getElementById('therapistList');
     let dailyTotal = 0;
     let weeklyTotal = 0;
     let monthlyTotal = 0;
     const clients = [];
     const spaName = "Ngalula Beauty Spa";
+
+    let servicePrices = {
+      massage: 500,
+      facial: 400,
+      manicure: 300,
+      pedicure: 350
+    };
+
+    let therapists = ['John', 'Sarah', 'Emma'];
+
+    function updateServicesList() {
+      servicesList.innerHTML = '';
+      Object.entries(servicePrices).forEach(([service, price]) => {
+        const div = document.createElement('div');
+        div.className = 'service-item';
+        div.innerHTML = `
+          <label>
+            <input type="checkbox" value="${service}"> ${service} (K${price})
+          </label>
+          <button type="button" class="delete-btn" onclick="deleteService('${service}')">Delete</button>
+        `;
+        servicesList.appendChild(div);
+      });
+    }
+
+    function updateTherapistList() {
+      therapistList.innerHTML = '';
+      therapists.forEach(therapist => {
+        const div = document.createElement('div');
+        div.className = 'therapist-item';
+        div.innerHTML = `
+          <label>
+            <input type="radio" name="therapist" value="${therapist}"> ${therapist}
+          </label>
+          <button type="button" class="delete-btn" onclick="deleteTherapist('${therapist}')">Delete</button>
+        `;
+        therapistList.appendChild(div);
+      });
+    }
+
+    function deleteService(service) {
+      delete servicePrices[service];
+      updateServicesList();
+    }
+
+    function deleteTherapist(therapist) {
+      therapists = therapists.filter(t => t !== therapist);
+      updateTherapistList();
+    }
+
+    document.getElementById('addService').addEventListener('click', function() {
+      const newService = document.getElementById('newService').value;
+      const newServicePrice = document.getElementById('newServicePrice').value;
+      if (newService && newServicePrice) {
+        servicePrices[newService] = parseInt(newServicePrice);
+        updateServicesList();
+        document.getElementById('newService').value = '';
+        document.getElementById('newServicePrice').value = '';
+      }
+    });
+
+    document.getElementById('addTherapist').addEventListener('click', function() {
+      const newTherapist = document.getElementById('newTherapist').value;
+      if (newTherapist) {
+        therapists.push(newTherapist);
+        updateTherapistList();
+        document.getElementById('newTherapist').value = '';
+      }
+    });
+
+    updateServicesList();
+    updateTherapistList();
 
     clientForm.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -15,13 +89,13 @@ const clientForm = document.getElementById('clientForm');
       const phone = document.getElementById('phone').value;
       const birthday = document.getElementById('birthday').value;
       const paymentMethod = document.getElementById('paymentMethod').value;
-      const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(input => ({
-        name: input.value,
-        price: parseFloat(input.dataset.price)
-      }));
-      const therapists = Array.from(document.querySelectorAll('input[name="therapists"]:checked')).map(input => input.value);
+      const services = Object.keys(servicePrices).filter(service => 
+        document.querySelector(`input[type="checkbox"][value="${service}"]:checked`)
+      );
+      const therapistElement = document.querySelector('#therapistList input[type="radio"]:checked');
+      const therapist = therapistElement ? therapistElement.value : 'Not specified';
 
-      const total = services.reduce((sum, service) => sum + service.price, 0);
+      const total = services.reduce((sum, service) => sum + servicePrices[service], 0);
 
       const client = {
         name,
@@ -30,7 +104,7 @@ const clientForm = document.getElementById('clientForm');
         birthday,
         paymentMethod,
         services,
-        therapists,
+        therapist,
         total,
         date: new Date()
       };
@@ -40,9 +114,11 @@ const clientForm = document.getElementById('clientForm');
       weeklyTotal += total;
       monthlyTotal += total;
 
-      totalAmountDiv.textContent = `Total for this client: ${total} ZMW`;
+      totalAmountDiv.textContent = `Total for this client: K${total}`;
 
       clientForm.reset();
+      updateServicesList();
+      updateTherapistList();
     });
 
     document.getElementById('dailyReport').addEventListener('click', () => generateReport('daily'));
@@ -52,22 +128,24 @@ const clientForm = document.getElementById('clientForm');
     function generateReport(type) {
       let total;
       let reportTitle;
-      const date = new Date();
-      const dayName = date.toLocaleString('en-US', { weekday: 'long' });
-      const monthName = date.toLocaleString('en-US', { month: 'long' });
-      
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const currentDate = new Date();
+      const dayName = days[currentDate.getDay()];
+      const monthName = months[currentDate.getMonth()];
+
       switch(type) {
         case 'daily':
           total = dailyTotal;
-          reportTitle = `Daily Report - ${dayName}, ${monthName} ${date.getDate()}, ${date.getFullYear()}`;
+          reportTitle = `Daily Report - ${dayName}, ${currentDate.getDate()} ${monthName} ${currentDate.getFullYear()}`;
           break;
         case 'weekly':
           total = weeklyTotal;
-          reportTitle = `Weekly Report - Week of ${monthName} ${date.getDate()}, ${date.getFullYear()}`;
+          reportTitle = `Weekly Report - Week of ${dayName}, ${currentDate.getDate()} ${monthName} ${currentDate.getFullYear()}`;
           break;
         case 'monthly':
           total = monthlyTotal;
-          reportTitle = `Monthly Report - ${monthName} ${date.getFullYear()}`;
+          reportTitle = `Monthly Report - ${monthName} ${currentDate.getFullYear()}`;
           break;
       }
 
@@ -80,19 +158,18 @@ const clientForm = document.getElementById('clientForm');
           <p>Phone: ${client.phone}</p>
           <p>Birthday: ${client.birthday}</p>
           <p>Payment Method: ${client.paymentMethod}</p>
-          <p>Services: ${client.services.map(s => s.name).join(', ')}</p>
-          <p>Therapists: ${client.therapists.join(', ')}</p>
-          <p>Total: ${client.total} ZMW</p>
-          <hr>
+          <p>Services: ${client.services.join(', ')}</p>
+          <p>Therapist: ${client.therapist}</p>
+          <p>Total: K${client.total}</p>
         `;
       });
 
       const report = `
         <h3>${reportTitle}</h3>
-        <h3>${spaName}</h3>
-        <p>Total amount: ${total} ZMW</p>
+        <p>Spa Name: ${spaName}</p>
+        <p>Total amount: K${total}</p>
         <p>Number of clients: ${clients.length}</p>
-        <h4>Client Details:</h4>
+        <h3>Client Details:</h3>
         ${clientDetails}
       `;
 
@@ -101,14 +178,15 @@ const clientForm = document.getElementById('clientForm');
       // Generate PDF
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      doc.text(reportTitle, 10, 10);
-      doc.text(spaName, 10, 20);
-      doc.text(`Total amount: ${total} ZMW`, 10, 30);
+      doc.text(spaName, 10, 10);
+      doc.text(reportTitle, 10, 20);
+      doc.text(`Total amount: K${total}`, 10, 30);
       doc.text(`Number of clients: ${clients.length}`, 10, 40);
       doc.text("Client Details:", 10, 50);
+      
       let yPos = 60;
       clients.forEach((client, index) => {
-        doc.text(`Client ${index + 1}`, 10, yPos);
+        doc.text(`Client ${index + 1}:`, 10, yPos);
         yPos += 10;
         doc.text(`Name: ${client.name}`, 15, yPos);
         yPos += 10;
@@ -120,55 +198,20 @@ const clientForm = document.getElementById('clientForm');
         yPos += 10;
         doc.text(`Payment Method: ${client.paymentMethod}`, 15, yPos);
         yPos += 10;
-        doc.text(`Services: ${client.services.map(s => s.name).join(', ')}`, 15, yPos);
+        doc.text(`Services: ${client.services.join(', ')}`, 15, yPos);
         yPos += 10;
-        doc.text(`Therapists: ${client.therapists.join(', ')}`, 15, yPos);
+        doc.text(`Therapist: ${client.therapist}`, 15, yPos);
         yPos += 10;
-        doc.text(`Total: ${client.total} ZMW`, 15, yPos);
-        yPos += 15;
+        doc.text(`Total: K${client.total}`, 15, yPos);
+        yPos += 20;
+        
         if (yPos > 280) {
           doc.addPage();
           yPos = 20;
         }
       });
+
       doc.save(`${type}_report.pdf`);
-    }
-
-    function addService() {
-      const serviceName = prompt("Enter service name:");
-      const servicePrice = prompt("Enter service price (in ZMW):");
-      if (serviceName && servicePrice) {
-        const servicesList = document.getElementById('servicesList');
-        const newService = document.createElement('div');
-        newService.className = 'service-item';
-        newService.innerHTML = `
-          <input type="checkbox" name="services" value="${serviceName}" data-price="${servicePrice}"> ${serviceName} (${servicePrice} ZMW)
-          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
-        `;
-        servicesList.appendChild(newService);
-      }
-    }
-
-    function deleteService(button) {
-      button.parentElement.remove();
-    }
-
-    function addTherapist() {
-      const therapistName = prompt("Enter therapist name:");
-      if (therapistName) {
-        const therapistsList = document.getElementById('therapistsList');
-        const newTherapist = document.createElement('div');
-        newTherapist.className = 'therapist-item';
-        newTherapist.innerHTML = `
-          <input type="checkbox" name="therapists" value="${therapistName}"> ${therapistName}
-          <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
-        `;
-        therapistsList.appendChild(newTherapist);
-      }
-    }
-
-    function deleteTherapist(button) {
-      button.parentElement.remove();
     }
 
     // Simple calculator

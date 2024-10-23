@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spa Inventory System</title>
+  <title>Ngalula Beauty Spa Inventory System</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Ngalula Beauty Spa Inventory System</h1>
+    <h1>Spa Inventory System</h1>
     <form id="clientForm">
       <label for="name">Client Name:</label>
       <input type="text" id="name" required>
@@ -32,43 +32,16 @@
         <option value="pay2cell">Pay2Cell</option>
       </select>
 
-      <label>Services:</label>
-      <div id="servicesList">
-        <div class="service-item">
-          <input type="checkbox" name="services" value="massage" data-price="500"> Massage (500 ZMW)
-          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
-        </div>
-        <div class="service-item">
-          <input type="checkbox" name="services" value="facial" data-price="400"> Facial (400 ZMW)
-          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
-        </div>
-        <div class="service-item">
-          <input type="checkbox" name="services" value="manicure" data-price="300"> Manicure (300 ZMW)
-          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
-        </div>
-        <div class="service-item">
-          <input type="checkbox" name="services" value="pedicure" data-price="350"> Pedicure (350 ZMW)
-          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
-        </div>
-      </div>
-      <button type="button" onclick="addService()">Add Service</button>
+      <label for="services">Services:</label>
+      <div id="servicesList"></div>
+      <input type="text" id="newService" placeholder="New service name">
+      <input type="number" id="newServicePrice" placeholder="New service price">
+      <button type="button" id="addService">Add Service</button>
 
-      <label>Therapists:</label>
-      <div id="therapistsList">
-        <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="john"> John
-          <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
-        </div>
-        <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="sarah"> Sarah
-          <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
-        </div>
-        <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="emma"> Emma
-          <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
-        </div>
-      </div>
-      <button type="button" onclick="addTherapist()">Add Therapist</button>
+      <label for="therapist">Therapist:</label>
+      <div id="therapistList"></div>
+      <input type="text" id="newTherapist" placeholder="New therapist name">
+      <button type="button" id="addTherapist">Add Therapist</button>
 
       <button type="submit">Submit</button>
     </form>
@@ -85,6 +58,6 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  
+  <script src="js/scripts.js"></script>
 </body>
 </html>
