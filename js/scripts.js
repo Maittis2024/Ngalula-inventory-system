@@ -40,7 +40,7 @@ const clientForm = document.getElementById('clientForm');
         div.className = 'therapist-item';
         div.innerHTML = `
           <label>
-            <input type="radio" name="therapist" value="${therapist}"> ${therapist}
+            <input type="checkbox" name="therapist" value="${therapist}"> ${therapist}
           </label>
           <button type="button" class="delete-btn" onclick="deleteTherapist('${therapist}')">Delete</button>
         `;
@@ -89,14 +89,19 @@ const clientForm = document.getElementById('clientForm');
       const phone = document.getElementById('phone').value;
       const birthday = document.getElementById('birthday').value;
       const paymentMethod = document.getElementById('paymentMethod').value;
+    
+      // Get selected services
       const services = Object.keys(servicePrices).filter(service => 
         document.querySelector(`input[type="checkbox"][value="${service}"]:checked`)
       );
-      const therapistElement = document.querySelector('#therapistList input[type="radio"]:checked');
-      const therapist = therapistElement ? therapistElement.value : 'Not specified';
-
+    
+      // Get selected therapists
+      const therapists = Array.from(document.querySelectorAll('#therapistList input[type="checkbox"]:checked')).map(input => input.value);
+    
+      // Calculate total amount for selected services
       const total = services.reduce((sum, service) => sum + servicePrices[service], 0);
-
+    
+      // Create client object
       const client = {
         name,
         email,
@@ -104,23 +109,26 @@ const clientForm = document.getElementById('clientForm');
         birthday,
         paymentMethod,
         services,
-        therapist,
+        therapists, // Store array of selected therapists
         total,
         date: new Date()
       };
-
+    
+      // Add client to the clients array
       clients.push(client);
       dailyTotal += total;
       weeklyTotal += total;
       monthlyTotal += total;
-
+    
+      // Update total amount displayed
       totalAmountDiv.textContent = `Total for this client: K${total}`;
-
+    
+      // Reset the form and update lists
       clientForm.reset();
       updateServicesList();
       updateTherapistList();
     });
-
+    
     document.getElementById('dailyReport').addEventListener('click', () => generateReport('daily'));
     document.getElementById('weeklyReport').addEventListener('click', () => generateReport('weekly'));
     document.getElementById('monthlyReport').addEventListener('click', () => generateReport('monthly'));
@@ -150,19 +158,19 @@ const clientForm = document.getElementById('clientForm');
       }
 
       let clientDetails = '';
-      clients.forEach((client, index) => {
-        clientDetails += `
-          <h4>Client ${index + 1}</h4>
-          <p>Name: ${client.name}</p>
-          <p>Email: ${client.email}</p>
-          <p>Phone: ${client.phone}</p>
-          <p>Birthday: ${client.birthday}</p>
-          <p>Payment Method: ${client.paymentMethod}</p>
-          <p>Services: ${client.services.join(', ')}</p>
-          <p>Therapist: ${client.therapist}</p>
-          <p>Total: K${client.total}</p>
-        `;
-      });
+clients.forEach((client, index) => {
+    clientDetails += `
+        <h4>Client ${index + 1}</h4>
+        <p>Name: ${client.name}</p>
+        <p>Email: ${client.email}</p>
+        <p>Phone: ${client.phone}</p>
+        <p>Birthday: ${client.birthday}</p>
+        <p>Payment Method: ${client.paymentMethod}</p>
+        <p>Services: ${client.services.join(', ')}</p>
+        <p>Therapist(s): ${client.therapists.join(', ')}</p> <!-- Ensure you use .join() to display all selected therapists -->
+        <p>Total: K${client.total}</p>
+    `;
+});
 
       const report = `
         <h3>${reportTitle}</h3>
