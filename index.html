@@ -26,45 +26,31 @@
       <select id="paymentMethod" required>
         <option value="">Select payment method</option>
         <option value="cash">Cash</option>
-        <option value="credit">Credit Card</option>
-        <option value="mobile">Mobile Money</option>
-        <option value="ewallet">E-Wallet</option>
-        <option value="pay2cell">Pay2Cell</option>
+        <option value="mobileMoney">Mobile Money</option>
+        <option value="card">Card</option>
       </select>
 
-      <label>Services:</label>
+      <h3>Services</h3>
       <div id="servicesList">
         <div class="service-item">
-          <input type="checkbox" name="services" value="massage" data-price="500"> Massage (500 ZMW)
+          <input type="checkbox" name="services" value="Facial" data-price="150"> Facial (150 ZMW)
           <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
         </div>
         <div class="service-item">
-          <input type="checkbox" name="services" value="facial" data-price="400"> Facial (400 ZMW)
-          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
-        </div>
-        <div class="service-item">
-          <input type="checkbox" name="services" value="manicure" data-price="300"> Manicure (300 ZMW)
-          <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
-        </div>
-        <div class="service-item">
-          <input type="checkbox" name="services" value="pedicure" data-price="350"> Pedicure (350 ZMW)
+          <input type="checkbox" name="services" value="Massage" data-price="200"> Massage (200 ZMW)
           <button type="button" class="delete-btn" onclick="deleteService(this)">Delete</button>
         </div>
       </div>
       <button type="button" onclick="addService()">Add Service</button>
 
-      <label>Therapists:</label>
+      <h3>Therapists</h3>
       <div id="therapistsList">
         <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="john"> John
+          <input type="checkbox" name="therapists" value="Therapist 1"> Therapist 1
           <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
         </div>
         <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="sarah"> Sarah
-          <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
-        </div>
-        <div class="therapist-item">
-          <input type="checkbox" name="therapists" value="emma"> Emma
+          <input type="checkbox" name="therapists" value="Therapist 2"> Therapist 2
           <button type="button" class="delete-btn" onclick="deleteTherapist(this)">Delete</button>
         </div>
       </div>
@@ -75,16 +61,16 @@
 
     <div id="totalAmount"></div>
 
+    <h2>Reports</h2>
+    <button id="dailyReport">Generate Daily Report</button>
+    <button id="weeklyReport">Generate Weekly Report</button>
+    <button id="monthlyReport">Generate Monthly Report</button>
+
     <div id="reportSection">
-      <h2>Financial Report</h2>
-      <button id="dailyReport">Daily Report</button>
-      <button id="weeklyReport">Weekly Report</button>
-      <button id="monthlyReport">Monthly Report</button>
       <div id="reportResult"></div>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="js/scripts.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
